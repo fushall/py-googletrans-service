@@ -1,0 +1,5 @@
+googletrans
+flask
+redis
+pymongo
+sqlalchemy

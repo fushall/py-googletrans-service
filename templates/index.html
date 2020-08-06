@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+
+{% block title %}bootstrap{% endblock title %}
+
+
+{% block content %}
+  <div style="display: flex; justify-content:center; align-items: center; max-width: 650px;">
+    <div>
+      <div>
+        <label for="src_lang">source language:</label>
+        <input id="src_lang" value="auto">
+      </div>
+      <div>
+        <label for="dest_lang">destination language:</label>
+        <input id="dest_lang" value="en">
+      </div>
+      <div>
+        <label for="text">text:</label>
+        <textarea id="text">hello world</textarea>
+      </div>
+      <div>
+        <button id="btn-trans">translate</button>
+      </div>
+      <div>
+        <label for="result">result</label>
+        <div id="result"></div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block scripts %}
+  <script>
+      let input_src_lang = document.getElementById('src_lang');
+      let input_dest_lang = document.getElementById('dest_lang');
+      let text = document.getElementById('text');
+      let btn_trans = document.getElementById('btn-trans');
+
+      btn_trans.addEventListener('click', function () {
+          let json = {
+              'src_lang': input_src_lang.value,
+              'dest_lang': input_dest_lang.value,
+              'text': text.value
+          };
+          console.log('2');
+          let url = `{{ url_for('get_translate') }}`;
+          let request = new Request(url, {
+              method: 'POST',
+              headers: {'content-type': 'application/json'},
+              body: JSON.stringify(json)
+          });
+          fetch(request)
+              .then(response => response.json())
+              .then(function (json) {
+                  let result = document.getElementById('result');
+                  result.innerText = json.translation;
+              });
+      });
+  </script>
+{% endblock scripts %}
